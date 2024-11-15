@@ -21,24 +21,26 @@ function handleError($message) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
     
-    // Add new member
-    if ($action === 'add_member') {
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $membership_type = $_POST['membership_type'];
+   // Add new member
+if ($action === 'add_member') {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $type = $_POST['membership_type']; 
 
-        $stmt = $conn->prepare("INSERT INTO members (name, email, password, type) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $name, $email, $password, $membership_type);
-        
-        if ($stmt->execute()) {
-            header("Location: members.php");
-            exit;
-        } else {
-            handleError($stmt->error);
-        }
-        $stmt->close();
+    $stmt = $conn->prepare("INSERT INTO members (name, email, password, membership_type) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $name, $email, $password, $type); 
+
+    if ($stmt->execute()) {
+        header("Location: members.php");
+        exit;
+    } else {
+        handleError($stmt->error);
     }
+    $stmt->close();
+}
+
+
 
 // Reset member password
 if ($action === 'reset_password') {
@@ -73,38 +75,44 @@ if ($action === 'reset_password') {
         $stmt->close();
     }
 }
-
 // Handling Instructors
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
-    $name = $_POST['name'];
-    $specialization = $_POST['specialization'];
-
+    
     if ($action === 'add_instructor') {
-        $stmt = $conn->prepare("INSERT INTO instructor(name, specialization) VALUES (?, ?)");
+        // Only define name and specialization when adding an instructor
+        $name = $_POST['name'];
+        $specialization = $_POST['specialization'];
+        
+        $stmt = $conn->prepare("INSERT INTO instructor (name, specialization) VALUES (?, ?)");
         $stmt->bind_param("ss", $name, $specialization);
-
+        
         if ($stmt->execute()) {
             header("Location: instructors.php");
             exit;
         } else {
             handleError($stmt->error);
         }
+        
         $stmt->close();
     } elseif ($action === 'delete_instructor') {
         $id = $_POST['id'];
-        $stmt = $conn->prepare("DELETE FROM instructors WHERE instructor_id=?");
+        
+        // Use the correct table name here; change to `instructor` if needed
+        $stmt = $conn->prepare("DELETE FROM instructor WHERE instructor_id = ?");
         $stmt->bind_param("i", $id);
-
+        
         if ($stmt->execute()) {
             header("Location: instructors.php");
             exit;
         } else {
             handleError($stmt->error);
         }
+        
         $stmt->close();
     }
 }
+
 // Handling Workouts
 // Adding Workouts
 if (isset($_POST['add_workout'])) {

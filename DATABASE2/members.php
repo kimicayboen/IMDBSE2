@@ -48,7 +48,7 @@
                     $id = isset($row['member_id']) ? $row['member_id'] : '';
                     $name = isset($row['name']) ? $row['name'] : '';
                     $email = isset($row['email']) ? $row['email'] : '';
-                    $membership_type = isset($row['type']) ? $row['type'] : '';
+                    $membership_type = isset($row['membership_type']) ? $row['membership_type'] : '';
 
                     echo "<tr>
                             <td>{$id}</td>
@@ -95,25 +95,13 @@
         <input type="password" id="password" name="password" required class="form-input">
 
         <label for="membership_type">Membership Type:</label>
-<select id="membership_type" name="membership_type" required class="form-input">
-    <?php
-    // Fetch membership types from the membership table
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    
-    $membership_sql = "SELECT membership_id, type FROM membership";
-    $membership_result = $conn->query($membership_sql);
-
-    if ($membership_result->num_rows > 0) {
-        while ($membership_row = $membership_result->fetch_assoc()) {
-            echo "<option value='{$membership_row['type']}'>{$membership_row['type']}</option>";
-        }
-    }
-    $conn->close();
-    ?>
-</select>
+        <select id="membership_type" name="membership_type" required class="form-input">
+            <option value="">---</option>
+            <option value="Basic">BASIC</option>
+            <option value="PREMIUM">PREMIUM</option>
+            <option value="ANNUAL BASIC">ANNUAL BASIC</option>
+            <option value="ANNUAL PREMIUM">ANNUAL PREMIUM</option>
+        </select>
         <div class="button-group">
             <button type="submit" name="action" value="add_member" class="btn">Add Member</button>
         </div>
