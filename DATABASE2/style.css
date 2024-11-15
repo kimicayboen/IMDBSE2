@@ -816,6 +816,20 @@ section.about {
 }
 
 
+.about .box .img img {
+    width: 200%; 
+    height: 400px; 
+    object-fit: cover; 
+    object-position: center; 
+}
+
+.about .box {
+    margin-top: 50px;  
+}
+
+
+
+
 .box {
     background-color: #2a2a2a; 
     border-radius: 10px;
