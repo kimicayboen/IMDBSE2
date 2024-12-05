@@ -173,10 +173,6 @@ header .ham-burger {
 	background-color:#111111;
 }
 
-.content {
-	margin-top: 10%;
-}
-
 .about .content{ 
  -webkit-display: flex;
  display: flex;
@@ -189,7 +185,6 @@ header .ham-burger {
 }
 .about .content .box .inner{
 	background-color:#222222;
-	border-radius: 10px;
 }
 .about .content .box:nth-child(2) .inner{
 	background-color: #c11325;
@@ -210,7 +205,6 @@ header .ham-burger {
 	text-transform: capitalize;
 	text-align: center;
 }
-
 .about .content .box .inner .text p{
 	font-size: 15px;
 	line-height:20px;
@@ -527,28 +521,15 @@ header .ham-burger {
 	-webkit-display: flex;
 	display: flex;
 }
-
 .price-package .content .box{
 	flex:0 0 33.33%;
 	max-width: 33.33%;
 	padding: 15px;
 	background-color: #c5c5c5;
 }
-
 .price-package .content .box .inner{
 	background-color: #f0f0f0;
 }
-
-.inner {
-	border-radius: 1.5%;
-}
-
-.price-tag {
-	border-radius: 1.5%;
-	margin-top: 2%;
-	margin-bottom: 2%;
-}
-
 .price-package .content .box .inner .price-tag{
 	padding: 15px;
 	font-size: 20px;
@@ -557,12 +538,10 @@ header .ham-burger {
 	text-align: center;
 	font-weight: 700;
 }
-
 .price-package .content .box .inner .text{
 	padding:30px 15px;
 	text-align: center;
 }
-
 .price-package .content .box .inner .text h3{
 	font-size: 24px;
 	color:#222222;
@@ -570,7 +549,6 @@ header .ham-burger {
 	padding:0px 0px 20px;
 	font-weight: 700;
 }
-
 .price-package .content .box .inner .text p{
  font-size: 15px;
  line-height: 20px;
@@ -580,7 +558,6 @@ header .ham-burger {
  padding:0 0 5px;
  font-family: 'Open-sans', sans-serif;	
 }
-
 .price-package .content .box .inner .text .btn{
     padding: 8px 30px;
     background-color: #c11325;
@@ -593,13 +570,11 @@ header .ham-burger {
     transition: all .5s ease;
     margin-top: 10px;
 }
-
 .price-package .content .box .inner .text .btn:hover{
 	border-color:#222222;
 	color:#222222;
 	background-color: transparent;
 }
-
 .price-package .content .box .inner .img img{
 	width: 100%;
 }

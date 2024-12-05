@@ -1,5 +1,4 @@
 <?php
-// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -7,40 +6,35 @@ $dbname = "gym";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Function to handle errors
 function handleError($message) {
     echo "Error: " . $message . "<br>" . $GLOBALS['conn']->error;
 }
 
-// Handling Members
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'];
-    
-   // Add new member
-if ($action === 'add_member') {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $type = $_POST['membership_type']; 
+    //handling members
+    // Add new member
+    if ($action === 'add_member') {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $membership_type = $_POST['membership_type'];
 
-    $stmt = $conn->prepare("INSERT INTO members (name, email, password, membership_type) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $name, $email, $password, $type); 
-
-    if ($stmt->execute()) {
-        header("Location: members.php");
-        exit;
-    } else {
-        handleError($stmt->error);
+        $stmt = $conn->prepare("INSERT INTO members (name, email, password, type) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $name, $email, $password, $membership_type);
+        
+        if ($stmt->execute()) {
+            header("Location: members.php");
+            exit;
+        } else {
+            handleError($stmt->error);
+        }
+        $stmt->close();
     }
-    $stmt->close();
-}
-
-
 
 // Reset member password
 if ($action === 'reset_password') {
@@ -75,143 +69,115 @@ if ($action === 'reset_password') {
         $stmt->close();
     }
 }
+
 // Handling Instructors
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
-    
+    $name = $_POST['name'];
+    $specialization = $_POST['specialization'];
+
     if ($action === 'add_instructor') {
-        // Only define name and specialization when adding an instructor
-        $name = $_POST['name'];
-        $specialization = $_POST['specialization'];
-        
-        $stmt = $conn->prepare("INSERT INTO instructor (name, specialization) VALUES (?, ?)");
+        $stmt = $conn->prepare("INSERT INTO instructors(name, specialization) VALUES (?, ?)");
         $stmt->bind_param("ss", $name, $specialization);
-        
+
         if ($stmt->execute()) {
             header("Location: instructors.php");
             exit;
         } else {
             handleError($stmt->error);
         }
-        
         $stmt->close();
     } elseif ($action === 'delete_instructor') {
         $id = $_POST['id'];
-        
-        // Use the correct table name here; change to `instructor` if needed
-        $stmt = $conn->prepare("DELETE FROM instructor WHERE instructor_id = ?");
+        $stmt = $conn->prepare("DELETE FROM instructors WHERE instructor_id=?");
         $stmt->bind_param("i", $id);
-        
+
         if ($stmt->execute()) {
             header("Location: instructors.php");
             exit;
         } else {
             handleError($stmt->error);
         }
-        
         $stmt->close();
     }
 }
-
 // Handling Workouts
 // Adding Workouts
-if (isset($_POST['add_workout'])) {
-    $name = $_POST['name'];
-    $type = $_POST['type'];
-    $intensity = $_POST['intensity'];
-    $equipment_used = $_POST['equipment_used'];
+    if (isset($_POST['add_workout'])) {
+        $name = $_POST['name'];
+        $type = $_POST['type'];
+        $intensity = $_POST['intensity'];
+        $equipment_used = $_POST['equipment_used'];
 
-    $stmt = $conn->prepare("INSERT INTO workouts (name, type, intensity, equipment_used) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssis", $name, $type, $intensity, $equipment_used);
+        $stmt = $conn->prepare("INSERT INTO workouts (name, type, intensity, equipment_used) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssis", $name, $type, $intensity, $equipment_used);
 
-    if ($stmt->execute()) {
-        echo "New workout added successfully";
-    } else {
-        handleError($stmt->error);
-    }
-    $stmt->close();
-}
-
-// Updating Workouts
-if (isset($_POST['update_workout'])) {
-    $id = $_POST['id'];
-    $name = $_POST['name'];
-    $type = $_POST['type'];
-    $intensity = $_POST['intensity'];
-    $equipment_used = $_POST['equipment_used'];
-
-    $stmt = $conn->prepare("UPDATE workouts SET name=?, type=?, intensity=?, equipment_used=? WHERE workout_id=?");
-    $stmt->bind_param("ssisi", $name, $type, $intensity, $equipment_used, $id);
-
-    if ($stmt->execute()) {
-        echo "Workout updated successfully";
-    } else {
-        handleError($stmt->error);
-    }
-    $stmt->close();
+        if ($stmt->execute()) {
+            header("Location: workouts.php");
+            exit;
+        } else {
+            handleError($stmt->error);
+        }
+        $stmt->close();
     }
 
-// Deleting Workouts
-if (isset($_POST['delete_workout'])) {
-    $id = $_POST['id'];
+    // Deleting Workouts
+    if (isset($_POST['delete_workout'])) {
+        $id = $_POST['workout_id'];
 
-    $stmt = $conn->prepare("DELETE FROM workouts WHERE workout_id=?");
-    $stmt->bind_param("i", $id);
+        $stmt = $conn->prepare("DELETE FROM workouts WHERE workout_id=?");
+        $stmt->bind_param("i", $id);
 
-    if ($stmt->execute()) {
-        echo "Workout deleted successfully";
-    } else {
-        handleError($stmt->error);
+        if ($stmt->execute()) {
+            header("Location: workouts.php");
+            exit;
+        } else {
+            handleError($stmt->error);
+        }
+        $stmt->close();
     }
-    $stmt->close();
-    }
+
 
     
     // Handling Plans
-    if (isset($_POST['add_plan'])) {
-        $name = $_POST['name'];
-        $description = $_POST['description'];
-    
-        $stmt = $conn->prepare("INSERT INTO plans (name, description) VALUES (?, ?)");
-        $stmt->bind_param("ss", $name, $description);
-    
-        if ($stmt->execute()) {
-            echo "New plan added successfully";
-        } else {
-            handleError($stmt->error);
-        }
-        $stmt->close();
+    // Add a new plan
+if (isset($_POST['add_plan'])) {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+
+    $sql = "INSERT INTO plans (name, description) VALUES ('$name', '$description')";
+    if ($conn->query($sql) === TRUE) {
+        echo "Plan added successfully.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    
-    if (isset($_POST['update_plan'])) {
-        $id = $_POST['id'];
-        $name = $_POST['name'];
-        $description = $_POST['description'];
-    
-        $stmt = $conn->prepare("UPDATE plans SET name=?, description=? WHERE id=?");
-        $stmt->bind_param("ssi", $name, $description, $id);
-    
-        if ($stmt->execute()) {
-            echo "Plan updated successfully";
-        } else {
-            handleError($stmt->error);
-        }
-        $stmt->close();
+}
+
+// Update an existing plan
+if (isset($_POST['update_plan'])) {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+
+    $sql = "UPDATE plans SET name='$name', description='$description' WHERE plan_id=$id";
+    if ($conn->query($sql) === TRUE) {
+        echo "Plan updated successfully.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
-    
-    if (isset($_POST['delete_plan'])) {
-        $id = $_POST['id'];
-    
-        $stmt = $conn->prepare("DELETE FROM plans WHERE id=?");
-        $stmt->bind_param("i", $id);
-    
-        if ($stmt->execute()) {
-            echo "Plan deleted successfully";
-        } else {
-            handleError($stmt->error);
-        }
-        $stmt->close();
+}
+
+// Delete a plan
+if (isset($_POST['delete_plan'])) {
+    $id = $_POST['id'];
+
+    $sql = "DELETE FROM plans WHERE plan_id=$id";
+    if ($conn->query($sql) === TRUE) {
+        echo "Plan deleted successfully.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
+}
     
     // Handling Classes
 if (isset($_POST['add_class'])) {

@@ -36,7 +36,6 @@
     <section class="about" id="about">
         <div class="container">
             <div class="content">
-                <!-- First Box -->
                 <div class="box wow bounceInUp animated">
                     <div class="inner">
                         <div class="img">
@@ -51,7 +50,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Second Box -->
                 <div class="box wow bounceInUp animated" data-wow-delay="0.2s">
                     <div class="inner">
                         <div class="img">
@@ -65,7 +63,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Third Box -->
                 <div class="box wow bounceInUp animated" data-wow-delay="0.4s">
                     <div class="inner">
                         <div class="img">

@@ -37,7 +37,7 @@
             }
 
             // Fetch instructors from the database
-            $sql = "SELECT * FROM instructor";
+            $sql = "SELECT * FROM instructors";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
@@ -79,15 +79,9 @@
         <input type="hidden" name="id" value="">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required class="form-input">
-        <label for="specialization">Specialization:</label>
         
-        <select id="specialization" name="specialization" required class="form-input">
-            <option value=""></option>
-            <option value="Cross Fit">Cross Fit</option>
-            <option value="Body Building">Body Building</option>
-            <option value="Power Lifting">Power Lifting</option>
-            <option value="Self Defense">Self Defense</option>
-        </select>
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization" required class="form-input">
         
         <div class="button-group">
             <button type="submit" name="action" value="add_instructor" class="btn">Add Instructor</button>
@@ -99,6 +93,7 @@
     function confirmDelete(event) {
         // Show confirmation dialog
         const confirmed = confirm("Are you sure you want to delete this instructor?");
+        
         // Prevent form submission if canceled
         if (!confirmed) {
             event.preventDefault();
